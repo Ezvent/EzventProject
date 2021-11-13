@@ -11,6 +11,7 @@ from flask import (
 from authlib.integrations.flask_client import OAuth
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy_utils import EmailType
+from gmail import get_credentials, create_message, send_message
 
 import json
 import os
