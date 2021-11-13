@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Homepage</title>
+  <link rel="stylesheet" href="App.css">
+  <script defer src="App.js"></script>
+</head>
+
+<body>
+
+    <main id="user-homepage-main-holder">
+    <h1 id="homepage-header">{User} Homepage</h1>
+        <div class="grid-container">
+
+            <div class="grid-event-requests-list-holder">
+                These are your pending requests
+                 <ol>
+                    <li>Event 1</li>
+                    <li>Event 2</li>
+                    <li>Event 3</li>
+                </ol> 
+            </div>
+
+            <div class="grid-accept-reject-list-holder">
+                Accept/Reject
+                <ol>
+                    <li>
+                        <button class="accept-button"><a href="/acceptevent">Accept</a></button>
+                        <button class="reject-button"><a href="/rejectevent">Reject</a></button>
+                    </li>
+                    <li>
+                        <button class="accept-button"><a href="/acceptevent">Accept</a></button>
+                        <button class="reject-button"><a href="/rejectevent">Reject</a></button>
+                    </li>
+                    <li><button class="accept-button"><a href="/acceptevent">Accept</a></button>
+                        <button class="reject-button"><a href="/rejectevent">Reject</a></button>
+                    </li>
+                </ol> 
+                 
+            </div>
+
+            <div class="grid-swappable-element-holder">
+                This is where the calendar will go
+            </div>
+    
+        </div>
+        <div class="general-button-holder">
+         <button class="default-button"><a href="/logout">Logout</a></button>
+         <button class="default-button"><a href="/changepassword">Change Password</a></button>
+        </div>
+
+    </main>
+</body>
+
+</html>

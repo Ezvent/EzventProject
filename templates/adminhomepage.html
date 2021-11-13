@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Homepage</title>
+  <link rel="stylesheet" href="App.css">
+  <script defer src="App.js"></script>
+</head>
+
+<body>
+
+    <main id="admin-homepage-main-holder">
+    <h1 id="homepage-header">{admin} Homepage</h1>
+        <div class="grid-container">
+
+            <div class="grid-admin-actions">
+                these are your actions as an admin
+                 <ul>
+                    <li><button class="create-button"><a href="/createuser">Create User</a></button></li>
+                    <li><button class="remove-button"><a href="/removeuser">Remove User</a></button></li>
+                    <li><button class="newevent-button"><a href="/createeventrequest">New Event</a></button></li>
+                    <li><button class="calendar-button"><a href="/showcalendar">Calendar</a></button></li>
+                </ul> 
+            </div>
+
+            <div class="grid-employee-user-list">
+                Current Employees
+                <ol>
+                    <li>Employee 1</li>
+                    <li>Employee 2</li>
+                    <li>Employee 3</li>
+                    <li>Employee 4</li>
+                    <li>Employee 5</li>
+                </ol> 
+                 
+            </div>
+
+            <div class="grid-swappable-element-holder">
+                This is where the calendar will go
+            </div>
+    
+        </div>
+        <div class="general-button-holder">
+         <button class="default-button"><a href="/logout">Logout</a></button>
+         <button class="default-button"><a href="/changepassword">Change Password</a></button>
+        </div>
+
+    </main>
+</body>
+
+</html>
