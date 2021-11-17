@@ -5,7 +5,7 @@ function User({ args }) {
 
   return (
     <>
-      <h1>Welcome to our Website</h1>
+      <h1>Welcome to Ezvent!</h1>
 
       {/* {args.email ? 
     (
