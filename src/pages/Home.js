@@ -1,8 +1,6 @@
-import React from 'react';
-
+import React from "react";
 
 function User({ args }) {
-
   return (
     <>
       <h1>Welcome to our Website</h1>
@@ -18,4 +16,3 @@ function User({ args }) {
 }
 
 export default User;
-

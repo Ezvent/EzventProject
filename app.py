@@ -101,10 +101,7 @@ def getData():
 @bp.route("/")
 def index():
     data = getData()
-    return render_template(
-        "index.html",
-        data=data,
-    )
+    return render_template("index.html", data=data)
 
 
 app.register_blueprint(bp)
