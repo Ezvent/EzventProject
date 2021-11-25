@@ -1,18 +1,21 @@
-import React from "react";
+import React from 'react';
+
 
 function User({ args }) {
+
   return (
     <>
-      <h1>Welcome to Ezvent!</h1>
+    <h1>Welcome to our Website</h1>
 
-      {/* {args.email ? 
+    {/* {args.email ? 
     (
       <a href="/logout"><button>logout</button></a>
     ): (
     <a href ="/login"><button>Login with google</button></a>
     )} */}
-    </>
+     </>
   );
 }
 
 export default User;
+
