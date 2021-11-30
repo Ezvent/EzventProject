@@ -20,21 +20,24 @@ def main():
     # time.
     if os.path.exists("token.json"):
         creds = Credentials.from_authorized_user_file("token.json", SCOPES)
+        print(creds)
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
+            print("here")
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
                 "client_secret.json", SCOPES
             )
             creds = flow.run_local_server(port=5000)
+            print(creds)
         # Save the credentials for the next run
         with open("token.json", "w") as token:
             token.write(creds.to_json())
 
     service = build("calendar", "v3", credentials=creds)
-
+    print(service)
     # Call the Calendar API
     now = datetime.datetime.utcnow().isoformat() + "Z"  # 'Z' indicates UTC time
     print("Getting the upcoming 10 events")
@@ -49,13 +52,11 @@ def main():
         )
         .execute()
     )
+    print(events_result)
     events = events_result.get("items", [])
-
+    print(events)
     if not events:
         print("No upcoming events found.")
-    for event in events:
-        start = event["start"].get("dateTime", event["start"].get("date"))
-        print(start, event["summary"])
 
 
 if __name__ == "__main__":

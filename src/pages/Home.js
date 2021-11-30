@@ -1,4 +1,5 @@
 import React from 'react';
+import Calendar from '../components/Calendar';
 
 
 function User({ args }) {
@@ -6,7 +7,7 @@ function User({ args }) {
   return (
     <>
     <h1>Welcome to our Website</h1>
-
+    <Calendar />
     {/* {args.email ? 
     (
       <a href="/logout"><button>logout</button></a>
