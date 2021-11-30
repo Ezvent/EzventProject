@@ -11,9 +11,14 @@ from flask import (
 from authlib.integrations.flask_client import OAuth
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy_utils import EmailType
-
 from flask_mail import Mail, Message
-
+from googleapiclient.discovery import build
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google.oauth2.credentials import Credentials
+from google.auth.transport.requests import Request
+import datetime
+from datetime import timedelta
+import os.path
 import json
 import os
 
@@ -29,13 +34,15 @@ if db_url.startswith("postgres://"):
 app.config["SQLALCHEMY_DATABASE_URI"] = db_url
 # Gets rid of a warning
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.secret_key = "your secret"
+app.secret_key = os.getenv("APP_SECRET_KEY")
+
+SCOPES = ["https://www.googleapis.com/auth/calendar"]
 
 # mail configuration
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
-app.config["MAIL_PORT"] = 465
-app.config["MAIL_USERNAME"] = "pateljahnavi0@gmail.com"
-app.config["MAIL_PASSWORD"] = "mbsqmjhkoddqfcln"
+app.config["MAIL_PORT"] = os.getenv("MAIL_PORT")
+app.config["MAIL_USERNAME"] = os.getenv("admin_email")
+app.config["MAIL_PASSWORD"] = os.getenv("password")
 app.config["MAIL_USE_TLS"] = False
 app.config["MAIL_USE_SSL"] = True
 mail = Mail(app)
@@ -59,15 +66,20 @@ db.create_all()
 # oauth config
 oauth = OAuth(app)
 
+
 google = oauth.register(
     name="google",
-    client_id="437004354025-2fp5btncj22trld1ihbctqnp9ltpa5ut.apps.googleusercontent.com",
-    client_secret="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",
-    access_token_url="https://accounts.google.com/o/oauth2/token",
+    client_id=os.getenv("client_id"),
+    client_secret=os.getenv("client_secret"),
+    access_token_url=os.getenv(
+        "access_token_url", "https://accounts.google.com/o/oauth2/token"
+    ),
     access_token_params=None,
-    authorize_url="https://accounts.google.com/o/oauth2/auth",
+    authorize_url=os.getenv(
+        "authorize_url", "https://accounts.google.com/o/oauth2/auth"
+    ),
     authorized_params=None,
-    api_base_url="https://www.googleapis.com/oauth2/v1/",
+    api_base_url=os.getenv("api_base_url", "https://www.googleapis.com/oauth2/v1/"),
     client_kwargs={"scope": "openid profile email"},
 )
 
@@ -77,16 +89,61 @@ google = oauth.register(
 # us to load React code into a webpage. Look up create-react-app for more reading on
 # why this is necessary.
 
+creds = None
+# The file token.json stores the user's access and refresh tokens, and is
+# created automatically when the authorization flow completes for the first
+# time.
+if os.path.exists("token.json"):
+    creds = Credentials.from_authorized_user_file("token.json", SCOPES)
+    print(creds)
+# If there are no (valid) credentials available, let the user log in.
+if not creds or not creds.valid:
+    if creds and creds.expired and creds.refresh_token:
+        creds.refresh(Request())
+        print("here")
+    else:
+        flow = InstalledAppFlow.from_client_secrets_file("client_secret.json", SCOPES)
+        creds = flow.run_local_server(port=5000)
+        print(creds)
+    # Save the credentials for the next run
+    with open("token.json", "w") as token:
+        token.write(creds.to_json())
+
+service = build("calendar", "v3", credentials=creds)
 
 bp = Blueprint("bp", __name__, template_folder="./build")
 
 
+def create_event(start_date_time, summary, duration=1, description=None, location=None):
+
+    end_time = start_date_time + timedelta(hours=duration)
+    event = {
+        "summary": summary,
+        "location": location,
+        "description": description,
+        "start": {
+            "dateTime": start_date_time.strftime("%Y-%m-%dT%H:%M:%S"),
+            "timeZone": "America/New_York",
+        },
+        "end": {
+            "dateTime": end_time.strftime("%Y-%m-%dT%H:%M:%S"),
+            "timeZone": "America/New_York",
+        },
+        "reminders": {
+            "useDefault": False,
+            "overrides": [
+                {"method": "email", "minutes": 24 * 60},
+                {"method": "popup", "minutes": 10},
+            ],
+        },
+    }
+    return service.events().insert(calendarId="primary", body=event).execute()
+
+
 def getData():
-    user = Allusers.query.filter_by(email="pateljahnavi0@gmail.com").first()
+    user = Allusers.query.filter_by(email=os.getenv("admin_email")).first()
     if not user:
-        admin = Allusers(
-            email="pateljahnavi0@gmail.com", is_admin=True, nickname="Jahnavi"
-        )
+        admin = Allusers(email=os.getenv("admin_email"), is_admin=True, nickname="None")
         db.session.add(admin)
         db.session.commit()
     email = dict(session).get("email", None)
@@ -131,8 +188,6 @@ def authorize():
     resp = google.get("userinfo")
     user_info = resp.json()
     session["email"] = user_info["email"]
-    # session['nickname'] = user_info['family_name']
-    # do something with the token and profile
 
     return redirect("/")
 
@@ -216,11 +271,15 @@ def SendMail():
     print(data)
     msg = Message(
         data["job_description"],
-        sender="pateljahnavi0@gmail.com",
+        sender=os.getenv("admin_email"),
         recipients=data["emails"],
     )
     msg.body = f'{data["job_description"]}\n selected event date: {data["select_a_date"]} \n start time: {data["start_time"]} \n end time: {data["end_time"]} \n '
     mail.send(msg)
+    dateandtime = data["select_a_date"] + " " + data["start_time"]
+    dateandtime = datetime.datetime.strptime(dateandtime, "%Y-%m-%d %H:%M")
+    create_event(dateandtime, data["job_description"])
+
     return jsonify({"message": "success"})
 
 

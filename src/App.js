@@ -11,18 +11,18 @@ function App() {
   console.log('isadmin', args.is_admin)
   return (
     <>
-    <Header isSignin={args.email}/>
+      <Header isSignin={args.email} />
 
-    <div>
-      {args.is_admin && <Admin args={args} /> }
+      <div>
+        {args.is_admin && <Admin args={args} />}
 
-      {args.is_admin === false && args.email !== null && <User args={args}/>}
-      
-      {args.email === null && <Home />}
+        {args.is_admin === false && args.email !== null && <User args={args} />}
+
+        {args.email === null && <Home />}
 
       </div>
 
-     </>
+    </>
 
   );
 }
