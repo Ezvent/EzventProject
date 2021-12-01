@@ -17,7 +17,7 @@ function User({ args }) {
 
             <AddorRemovePopup />
             <CreateNewEvent />
-            <Calendar email={args.email}/>
+            <Calendar email={args.email} />
 
         </>
     );

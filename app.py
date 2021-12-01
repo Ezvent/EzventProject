@@ -69,17 +69,13 @@ oauth = OAuth(app)
 
 google = oauth.register(
     name="google",
-    client_id=os.getenv("client_id"),
-    client_secret=os.getenv("client_secret"),
-    access_token_url=os.getenv(
-        "access_token_url", "https://accounts.google.com/o/oauth2/token"
-    ),
+    client_id="437004354025-2fp5btncj22trld1ihbctqnp9ltpa5ut.apps.googleusercontent.com",
+    client_secret="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",
+    access_token_url="https://accounts.google.com/o/oauth2/token",
     access_token_params=None,
-    authorize_url=os.getenv(
-        "authorize_url", "https://accounts.google.com/o/oauth2/auth"
-    ),
+    authorize_url="https://accounts.google.com/o/oauth2/auth",
     authorized_params=None,
-    api_base_url=os.getenv("api_base_url", "https://www.googleapis.com/oauth2/v1/"),
+    api_base_url="https://www.googleapis.com/oauth2/v1/",
     client_kwargs={"scope": "openid profile email"},
 )
 
@@ -137,7 +133,14 @@ def create_event(start_date_time, summary, duration=1, description=None, locatio
             ],
         },
     }
-    return service.events().insert(calendarId="primary", body=event).execute()
+    return (
+        service.events()
+        .insert(
+            calendarId="qb4oq3kl7h98fvkvudmq98mpqg@group.calendar.google.com",
+            body=event,
+        )
+        .execute()
+    )
 
 
 def getData():
