@@ -277,11 +277,14 @@ def SendMail():
         sender=os.getenv("admin_email"),
         recipients=data["emails"],
     )
-    msg.body = f'{data["job_description"]}\n selected event date: {data["select_a_date"]} \n start time: {data["start_time"]} \n end time: {data["end_time"]} \n '
-    mail.send(msg)
+    
     dateandtime = data["select_a_date"] + " " + data["start_time"]
     dateandtime = datetime.datetime.strptime(dateandtime, "%Y-%m-%d %H:%M")
-    create_event(dateandtime, data["job_description"])
+    ev = create_event(dateandtime, data["job_description"])
+
+    msg.body = f'{data["job_description"]}\n selected event date: {data["select_a_date"]} \n start time: {data["start_time"]} \n end time: {data["end_time"]} \n {ev["htmlLink"]} \n \n'
+    mail.send(msg)
+
 
     return jsonify({"message": "success"})
 

@@ -3,6 +3,8 @@
 .env
 __pycache__
 client_secret.json
+storage.json
+token.json
 
 # dependencies
 /node_modules

@@ -46,5 +46,8 @@ def createEvent():
             ev["summary"].encode("utf-8"),
             ev["start"]["dateTime"],
             ev["end"]["dateTime"],
+            ev["id"]
         )
     )
+
+    return ev['htmlLink']
