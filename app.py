@@ -69,8 +69,8 @@ oauth = OAuth(app)
 
 google = oauth.register(
     name="google",
-    client_id="437004354025-2fp5btncj22trld1ihbctqnp9ltpa5ut.apps.googleusercontent.com",
-    client_secret="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",
+    client_id=os.getenv("client_id"),
+    client_secret=os.getenv("client_secret"),
     access_token_url="https://accounts.google.com/o/oauth2/token",
     access_token_params=None,
     authorize_url="https://accounts.google.com/o/oauth2/auth",
@@ -277,14 +277,13 @@ def SendMail():
         sender=os.getenv("admin_email"),
         recipients=data["emails"],
     )
-    
+
     dateandtime = data["select_a_date"] + " " + data["start_time"]
     dateandtime = datetime.datetime.strptime(dateandtime, "%Y-%m-%d %H:%M")
     ev = create_event(dateandtime, data["job_description"])
 
     msg.body = f'{data["job_description"]}\n selected event date: {data["select_a_date"]} \n start time: {data["start_time"]} \n end time: {data["end_time"]} \n {ev["htmlLink"]} \n \n'
     mail.send(msg)
-
 
     return jsonify({"message": "success"})
 
