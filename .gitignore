@@ -2,8 +2,6 @@
 
 .env
 __pycache__
-client_secret.json
-token.json
 
 # dependencies
 /node_modules
@@ -26,5 +24,6 @@ token.json
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-token.json
+
 client_secret.json
+token.json

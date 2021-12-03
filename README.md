@@ -21,3 +21,7 @@ Employee can print or copy the event details to his personal calendar.
 # Run Application
 - npm run build
 - python3 app.py 
+
+#API Secrets requirnment
+Google oAUTH credentials
+Google calendar credenstials
