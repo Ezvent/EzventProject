@@ -14,3 +14,7 @@ The accepeted working hours will be save in google calander, which is visible to
 # Run Application
 - npm run build
 - python3 app.py 
+
+#API Secrets requirnment
+Google oAUTH credentials
+Google calendar credenstials
