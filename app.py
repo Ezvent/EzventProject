@@ -22,6 +22,7 @@ import os.path
 import json
 import os
 
+import secret
 from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv())
@@ -69,8 +70,8 @@ oauth = OAuth(app)
 
 google = oauth.register(
     name="google",
-    client_id="437004354025-7s4n7vm2fdhk0qbac3cr70opqac0ds4k.apps.googleusercontent.com",
-    client_secret="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",
+    client_id=secret.client_id,
+    client_secret=secret.client_secret,
     access_token_url="https://accounts.google.com/o/oauth2/token",
     access_token_params=None,
     authorize_url="https://accounts.google.com/o/oauth2/auth",
