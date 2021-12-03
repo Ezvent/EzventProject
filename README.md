@@ -1,6 +1,6 @@
 ﻿# Ezvent App
  
-#Heroku App Link.
+# Heroku App Link.
 http://intense-coast-41258.herokuapp.com
 
 # what does this app do?
@@ -22,6 +22,6 @@ Employee can print or copy the event details to his personal calendar.
 - npm run build
 - python3 app.py 
 
-#API Secrets requirnment
+# API Secrets requirnment
 Google oAUTH credentials
 Google calendar credenstials

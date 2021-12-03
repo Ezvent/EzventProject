@@ -27,3 +27,4 @@ yarn-error.log*
 
 client_secret.json
 token.json
+secret.py
