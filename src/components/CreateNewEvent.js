@@ -1,19 +1,19 @@
-import React, { useState } from "react";
-import { Button, Icon, Image, Modal, List } from "semantic-ui-react";
-import userimg from "./users.png";
-import { Formik } from "formik";
+/* global fetch, alert */
+import React, { useState } from 'react';
+import {
+  Button, Icon, Image, Modal, List,
+} from 'semantic-ui-react';
+import { Formik } from 'formik';
+import userimg from './users.png';
 
-const CreateNewEvent = () => {
+const CreateNewEvent = function CreateNewEvent() {
   const [open, setOpen] = React.useState(false);
   const [users, setUsers] = useState([]);
 
   const usersHandler = () => {
-    fetch("/getallusers").then((response) =>
-      response.json().then((data) => {
-        console.log(data);
-        setUsers(data.email);
-      })
-    );
+    fetch('/getallusers').then((response) => response.json().then((data) => {
+      setUsers(data.email);
+    }));
   };
   return (
     <Modal
@@ -29,36 +29,36 @@ const CreateNewEvent = () => {
         <Modal.Description>
           <Formik
             initialValues={{
-              select_a_date: "",
-              start_time: "",
-              end_time: "",
-              job_description: "",
+              select_a_date: '',
+              start_time: '',
+              end_time: '',
+              job_description: '',
               emails: new Array(20).fill(false),
             }}
             validate={(values) => {
               const errors = {};
               if (!values.select_a_date) {
-                errors.select_a_date = "Required";
+                errors.select_a_date = 'Required';
               }
               if (!values.start_time) {
-                errors.start_time = "Required";
+                errors.start_time = 'Required';
               }
               if (!values.end_time) {
-                errors.end_time = "Required";
+                errors.end_time = 'Required';
               }
               if (!values.job_description) {
-                errors.job_description = "Required";
+                errors.job_description = 'Required';
               }
 
               return errors;
             }}
-            onSubmit={(values, { setSubmitting }) => {
+            onSubmit={(values) => {
               const selected_emails = [];
               let j = 0;
-              for (let i = 0; i < users.length; i = i + 1) {
+              for (let i = 0; i < users.length; i += 1) {
                 if (values.emails[i]) {
                   selected_emails[j] = users[i];
-                  j = j + 1;
+                  j += 1;
                 }
               }
               const event_details = {
@@ -68,26 +68,19 @@ const CreateNewEvent = () => {
                 job_description: values.job_description,
                 emails: selected_emails,
               };
-
-              console.log(event_details);
-
-              fetch("/sendmail", {
-                method: "POST",
+              fetch('/sendmail', {
+                method: 'POST',
                 headers: {
-                  "Content-Type": "application/json",
+                  'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ data: event_details }),
-              }).then((response) =>
-                response.json().then((data) => {
-                  console.log(data);
-
-                  if (!data.message) {
-                    alert("Invitation failed, there is some problem! :-(");
-                  } else {
-                    alert("Invitation sent successfully! :-)");
-                  }
-                })
-              );
+              }).then((response) => response.json().then((data) => {
+                if (!data.message) {
+                  alert('Invitation failed, there is some problem! :-(');
+                } else {
+                  alert('Invitation sent successfully! :-)');
+                }
+              }));
             }}
           >
             {({
@@ -110,12 +103,12 @@ const CreateNewEvent = () => {
                       value={values.select_a_date}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                    ></input>
+                    />
                   </label>
                 </p>
-                {errors.select_a_date &&
-                  touched.select_a_date &&
-                  errors.select_a_date}
+                {errors.select_a_date
+                  && touched.select_a_date
+                  && errors.select_a_date}
                 <p>
                   <label>
                     Start time
@@ -125,7 +118,7 @@ const CreateNewEvent = () => {
                       value={values.start_time}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                    ></input>
+                    />
                   </label>
                 </p>
                 {errors.start_time && touched.start_time && errors.start_time}
@@ -138,7 +131,7 @@ const CreateNewEvent = () => {
                       value={values.end_time}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                    ></input>
+                    />
                   </label>
                 </p>
                 {errors.end_time && touched.end_time && errors.end_time}
@@ -151,42 +144,42 @@ const CreateNewEvent = () => {
                       value={values.job_description}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                    ></input>
+                    />
                   </label>
                 </p>
-                {errors.job_description &&
-                  touched.job_description &&
-                  errors.job_description}
+                {errors.job_description
+                  && touched.job_description
+                  && errors.job_description}
 
                 {users && (
                   <div>
                     <h3>All users</h3>
                     <List>
-                      {users.map((em, i) => {
-                        return (
-                          <List.Item
-                            style={{ marginBottom: "10px" }}
-                            key={Math.random}
-                          >
-                            <input
-                              style={{ margin: "12px" }}
-                              type="checkbox"
-                              name={`emails[${i}]`}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              value={values.emails[i]}
-                            />
-                            {em}
-                          </List.Item>
-                        );
-                      })}
+                      {users.map((em, i) => (
+                        <List.Item
+                          style={{ marginBottom: '10px' }}
+                          key={Math.random}
+                        >
+                          <input
+                            style={{ margin: '12px' }}
+                            type="checkbox"
+                            name={`emails[${i}]`}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.emails[i]}
+                          />
+                          {em}
+                        </List.Item>
+                      ))}
                     </List>
                   </div>
                 )}
 
-                <p></p>
+                <p />
                 <Button type="submit" disabled={isSubmitting} primary>
-                  Invite <Icon name="chevron right" />
+                  Invite
+                  {' '}
+                  <Icon name="chevron right" />
                 </Button>
               </form>
             )}
